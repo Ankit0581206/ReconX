@@ -1,0 +1,57 @@
+{
+  "target": "vulnweb.com",
+  "module": "subdomains",
+  "timestamp": "2026-05-31T15:29:20.733026Z",
+  "elapsed_sec": 17.4,
+  "count": 6,
+  "results": [
+    {
+      "name": "rest.vulnweb.com",
+      "ip": "18.215.71.186",
+      "source": "ct-logs",
+      "status": "alive",
+      "cname": "",
+      "extra": {}
+    },
+    {
+      "name": "testasp.vulnweb.com",
+      "ip": "44.238.29.244",
+      "source": "ct-logs",
+      "status": "alive",
+      "cname": "",
+      "extra": {}
+    },
+    {
+      "name": "testaspnet.vulnweb.com",
+      "ip": "44.238.29.244",
+      "source": "ct-logs",
+      "status": "alive",
+      "cname": "",
+      "extra": {}
+    },
+    {
+      "name": "testhtml5.vulnweb.com",
+      "ip": "44.228.249.3",
+      "source": "ct-logs",
+      "status": "alive",
+      "cname": "",
+      "extra": {}
+    },
+    {
+      "name": "testphp.vulnweb.com",
+      "ip": "44.228.249.3",
+      "source": "ct-logs",
+      "status": "alive",
+      "cname": "",
+      "extra": {}
+    },
+    {
+      "name": "www.vulnweb.com",
+      "ip": "44.228.249.3",
+      "source": "ct-logs",
+      "status": "alive",
+      "cname": "",
+      "extra": {}
+    }
+  ]
+}
