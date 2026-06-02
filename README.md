@@ -15,8 +15,8 @@
 | Day | Feature | Status |
 |-----|---------|--------|
 | 1 | Subdomain Enumeration (crt.sh + DNS brute-force + VirusTotal) | Done |
-| 2 | Port Scanner (Nmap wrapper) | Tomorrow |
-| 3 | Technology Fingerprinting |  |
+| 2 | Port Scanner (Nmap wrapper) | Done |
+| 3 | Technology Fingerprinting | Tomorrow |
 | 4 | Directory Discovery (FFUF wrapper) |  |
 | 5 | HTML + JSON Report Generator |  |
 | 6 | Discord / Telegram Notifications |  |
@@ -67,6 +67,15 @@ reconx subs -t example.com -o results/example_subs.json
 
 # Increase threads for faster brute-force
 reconx subs -t example.com --threads 100
+# Quick test — top 20 ports
+reconx ports -t testphp.vulnweb.com --top 20 --skip-ping --no-banner
+
+# Specific ports (fast)
+reconx ports -t 44.228.249.3 -p 22,80,443,3306,6379,27017 --skip-ping
+
+# Full top-1000 scan (takes ~2 min)
+reconx ports -t vulnweb.com --top 1000 --skip-ping
+
 ```
 
 ### Example Output
@@ -128,7 +137,8 @@ reconx/
 ├── reconx/
 │   ├── cli.py              # Click CLI — entry point
 │   ├── modules/
-│   │   └── subdomains.py   # Day 1: Subdomain enumerator
+│   │   ├── subdomains.py   # Day 1: Subdomain enumerator
+        └── ports.py        # Day 2: port scanner with service detection and risk ratings
 │   └── utils/
 │       └── output.py       # Rich terminal output helpers
 ├── wordlists/

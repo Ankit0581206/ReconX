@@ -29,9 +29,9 @@ from reconx.utils.output import console, section_header, found, info, warn, erro
 
 load_dotenv()
 
-# ─────────────────────────────────────────────────────────────
+
 # Data Model
-# ─────────────────────────────────────────────────────────────
+
 
 @dataclass
 class Subdomain:
@@ -46,9 +46,9 @@ class Subdomain:
         return asdict(self)
 
 
-# ─────────────────────────────────────────────────────────────
+
 # SubdomainEnumerator
-# ─────────────────────────────────────────────────────────────
+
 
 class SubdomainEnumerator:
     DEFAULT_WORDLIST = Path(__file__).parent.parent.parent / "wordlists" / "subdomains.txt"
