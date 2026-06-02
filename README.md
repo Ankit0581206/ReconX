@@ -67,6 +67,10 @@ reconx subs -t example.com -o results/example_subs.json
 
 # Increase threads for faster brute-force
 reconx subs -t example.com --threads 100
+```
+
+## Usage — Day 1: Subdomain Enumeration
+```bash
 # Quick test — top 20 ports
 reconx ports -t testphp.vulnweb.com --top 20 --skip-ping --no-banner
 
