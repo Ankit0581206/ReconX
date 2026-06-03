@@ -16,8 +16,8 @@
 |-----|---------|--------|
 | 1 | Subdomain Enumeration (crt.sh + DNS brute-force + VirusTotal) | Done |
 | 2 | Port Scanner (Nmap wrapper) | Done |
-| 3 | Technology Fingerprinting | Tomorrow |
-| 4 | Directory Discovery (FFUF wrapper) |  |
+| 3 | Technology Fingerprinting | DOne |
+| 4 | Directory Discovery (FFUF wrapper) | Tomorrow |
 | 5 | HTML + JSON Report Generator |  |
 | 6 | Discord / Telegram Notifications |  |
 | 7 | Full Pipeline + Documentation |  |
@@ -69,7 +69,7 @@ reconx subs -t example.com -o results/example_subs.json
 reconx subs -t example.com --threads 100
 ```
 
-## Usage — Day 1: Subdomain Enumeration
+## Usage — Day 2: Port Scanner
 ```bash
 # Quick test — top 20 ports
 reconx ports -t testphp.vulnweb.com --top 20 --skip-ping --no-banner
@@ -81,58 +81,24 @@ reconx ports -t 44.228.249.3 -p 22,80,443,3306,6379,27017 --skip-ping
 reconx ports -t vulnweb.com --top 1000 --skip-ping
 
 ```
+## Usage — Day 3: Tech Fingerprinter
+```bash
+# Scan any domain — auto-adds https://
+reconx tech -t vulnweb.com --no-banner
 
-### Example Output
+# Full URL
+reconx tech -t https://testphp.vulnweb.com --no-banner
+
+# Save results to a specific file
+reconx tech -t vulnweb.com -o output/vulnweb_tech.json --no-banner
+
+# Don't follow redirects
+reconx tech -t vulnweb.com --no-redirect --no-banner
+
+# Increase timeout for slow targets
+reconx tech -t vulnweb.com --timeout 20 --no-banner
 
 ```
- ██████╗ ███████╗ ██████╗ ██████╗ ███╗   ██╗██╗  ██╗
- ...
-
-◈ SUBDOMAIN ENUMERATION
-────────────────────────
-  →  Target     : example.com
-  →  Sources    : brute, crt, virustotal
-  →  Threads    : 50
-
-  ✓  api.example.com                           93.184.216.34    [crt.sh]
-  ✓  mail.example.com                          93.184.216.34    [brute]
-  ✓  dev.example.com                           93.184.216.100   [crt.sh]  → CNAME: dev.example.com.cdn.cloudflare.net
-
-╭────────────────────────────────────────╮
-│   Subdomain Enumeration Complete       │
-│                                        │
-│   Target             example.com       │
-│   Total found        47                │
-│   Sources used       brute, crt        │
-│   Time elapsed       12.4s             │
-│   Wordlist entries   200               │
-╰────────────────────────────────────────╯
-
-  →  Results saved → output/example_com_subs_20240101_120000.json
-```
-
-### JSON Output Structure
-
-```json
-{
-  "target": "example.com",
-  "module": "subdomains",
-  "timestamp": "2024-01-01T12:00:00Z",
-  "elapsed_sec": 12.4,
-  "count": 47,
-  "results": [
-    {
-      "name": "api.example.com",
-      "ip": "93.184.216.34",
-      "source": "crt.sh",
-      "status": "alive",
-      "cname": ""
-    }
-  ]
-}
-```
-
----
 
 ## Project Structure
 
@@ -142,7 +108,8 @@ reconx/
 │   ├── cli.py              # Click CLI — entry point
 │   ├── modules/
 │   │   ├── subdomains.py   # Day 1: Subdomain enumerator
-        └── ports.py        # Day 2: port scanner with service detection and risk ratings
+        ├── Ports.py        # Day 2: port scanner with service detection and risk ratings
+        └── tech.py         # Day 3: technology fingerprinter — CMS, WAF, CDN, security headers
 │   └── utils/
 │       └── output.py       # Rich terminal output helpers
 ├── wordlists/
@@ -187,4 +154,4 @@ reconx subs -t target.com \
 
 ---
 
-*Built as part of the 60-Day Challenge — Day 1/60*
+*Built as part of the 60-Day Challenge*

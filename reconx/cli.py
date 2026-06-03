@@ -3,7 +3,7 @@ ReconX CLI — Entry Point
 
 Day 1: `reconx subs`    — Subdomain enumeration       done
 Day 2: `reconx ports`   — Port scanning               done
-Day 3: `reconx tech`    — Tech fingerprinting         (coming)
+Day 3: `reconx tech`    — Tech fingerprinting         done
 Day 4: `reconx dirs`    — Directory discovery         (coming)
 Day 5: `reconx report`  — Report generation           (coming)
 Day 6: `reconx notify`  — Notifications               (coming)
@@ -168,15 +168,43 @@ def ports(target, top, ports, timeout, skip_ping, all_ports, output, no_banner):
         raise click.ClickException(result.error)
 
 
-# ── Day 3 placeholder ─────────────────────────────────────────────────
+# ── Day 3: `reconx tech` ─────────────────────────────────────────────
 
 @cli.command("tech")
-@click.option("-t", "--target", required=True)
-@click.option("-o", "--output", default=None)
-def tech(target, output):
-    """[DAY 3] Fingerprint technology stack (CMS, server, WAF, CDN)."""
-    banner()
-    console.print("\n  [yellow]⏳ Tech fingerprinter coming on Day 3![/yellow]\n")
+@click.option("-t", "--target",   required=True, help="Target URL or domain (e.g. example.com)")
+@click.option("--timeout",        default=12,    show_default=True, help="HTTP request timeout (seconds)")
+@click.option("--no-redirect",    is_flag=True,  help="Don't follow HTTP redirects")
+@click.option("-o", "--output",   default=None,  help="Output JSON file (auto-named if omitted)")
+@click.option("--no-banner",      is_flag=True,  help="Skip the ASCII banner")
+def tech(target, timeout, no_redirect, output, no_banner):
+    """
+    \b
+    Fingerprint web technology stack from HTTP headers and HTML body.
+    Detects: server, language, CMS, JS framework, CDN, WAF, security headers.
+
+    \b
+    Examples:
+      reconx tech -t example.com
+      reconx tech -t https://shop.example.com
+      reconx tech -t example.com -o results/tech.json
+    """
+    if not no_banner:
+        banner()
+
+    from reconx.modules.tech import TechFingerprinter
+
+    fp     = TechFingerprinter(
+        target           = target,
+        timeout          = timeout,
+        follow_redirects = not no_redirect,
+    )
+    result      = fp.run()
+    output_path = _resolve_output_path(output, target, "tech")
+    _save_json(output_path, result.to_dict())
+    info(f"Results saved → [accent]{output_path}[/accent]")
+
+    if result.error:
+        raise click.ClickException(result.error)
 
 
 # ── Day 4 placeholder ─────────────────────────────────────────────────
