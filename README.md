@@ -16,9 +16,9 @@
 |-----|---------|--------|
 | 1 | Subdomain Enumeration (crt.sh + DNS brute-force + VirusTotal) | Done |
 | 2 | Port Scanner (Nmap wrapper) | Done |
-| 3 | Technology Fingerprinting | DOne |
-| 4 | Directory Discovery (FFUF wrapper) | Tomorrow |
-| 5 | HTML + JSON Report Generator |  |
+| 3 | Technology Fingerprinting | Done |
+| 4 | Directory Discovery (FFUF wrapper) | Done |
+| 5 | HTML + JSON Report Generator | Tomorrow |
 | 6 | Discord / Telegram Notifications |  |
 | 7 | Full Pipeline + Documentation |  |
 
@@ -99,6 +99,24 @@ reconx tech -t vulnweb.com --no-redirect --no-banner
 reconx tech -t vulnweb.com --timeout 20 --no-banner
 
 ```
+## Usage — Day 4: directory discovery
+```bash
+
+# Basic scan — built-in 212-entry wordlist
+reconx dirs -t vulnweb.com --no-banner
+
+# Add file extensions (great for PHP/ASP sites)
+reconx dirs -t vulnweb.com -x php,bak,txt,json --no-banner
+
+# Scan a specific path (e.g. the API)
+reconx dirs -t vulnweb.com/api --no-banner
+
+# Use SecLists for deeper coverage (Garuda has it)
+reconx dirs -t vulnweb.com \
+  -w /usr/share/seclists/Discovery/Web-Content/common.txt \
+  --threads 80 --no-banner
+
+```
 
 ## Project Structure
 
@@ -109,10 +127,12 @@ reconx/
 │   ├── modules/
 │   │   ├── subdomains.py   # Day 1: Subdomain enumerator
         ├── Ports.py        # Day 2: port scanner with service detection and risk ratings
-        └── tech.py         # Day 3: technology fingerprinter — CMS, WAF, CDN, security headers
+        ├── tech.py         # Day 3: technology fingerprinter — CMS, WAF, CDN, security headers
+        └── tech.py         # Day 4: directory discovery with soft-404 filter and interesting path detection
 │   └── utils/
 │       └── output.py       # Rich terminal output helpers
 ├── wordlists/
+    ├── directories.txt     # Directory & Endpoint Wordlist ~300 entries: common dirs, files, API paths, sensitive files
 │   └── subdomains.txt      # Default 200-entry wordlist
 ├── output/                 # Scan results saved here
 ├── .env.example            # API key template

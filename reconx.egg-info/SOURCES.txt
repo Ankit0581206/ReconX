@@ -9,6 +9,8 @@ reconx.egg-info/entry_points.txt
 reconx.egg-info/requires.txt
 reconx.egg-info/top_level.txt
 reconx/modules/__init__.py
+reconx/modules/ports.py
 reconx/modules/subdomains.py
+reconx/modules/tech.py
 reconx/utils/__init__.py
 reconx/utils/output.py

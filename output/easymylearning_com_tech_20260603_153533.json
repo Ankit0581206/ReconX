@@ -1,0 +1,32 @@
+{
+  "target": "easymylearning.com",
+  "module": "tech",
+  "url": "https://easymylearning.com",
+  "final_url": "https://www.easymylearning.com/",
+  "status_code": 200,
+  "timestamp": "2026-06-03T15:35:32.824882Z",
+  "elapsed_sec": 0.58,
+  "error": "",
+  "missing_sec_hdrs": [
+    "CSP",
+    "Permissions-Policy",
+    "Referrer-Policy",
+    "X-Content-Type",
+    "X-Frame-Options",
+    "X-XSS-Protection"
+  ],
+  "technologies": [
+    {
+      "category": "js_framework",
+      "name": "Next.js",
+      "version": "",
+      "source": "body"
+    },
+    {
+      "category": "sec_header",
+      "name": "HSTS",
+      "version": "",
+      "source": "header_key"
+    }
+  ]
+}

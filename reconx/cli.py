@@ -4,7 +4,7 @@ ReconX CLI — Entry Point
 Day 1: `reconx subs`    — Subdomain enumeration       done
 Day 2: `reconx ports`   — Port scanning               done
 Day 3: `reconx tech`    — Tech fingerprinting         done
-Day 4: `reconx dirs`    — Directory discovery         (coming)
+Day 4: `reconx dirs`    — Directory discovery         done
 Day 5: `reconx report`  — Report generation           (coming)
 Day 6: `reconx notify`  — Notifications               (coming)
 Day 7: `reconx full`    — Full pipeline               (coming)
@@ -210,13 +210,68 @@ def tech(target, timeout, no_redirect, output, no_banner):
 # ── Day 4 placeholder ─────────────────────────────────────────────────
 
 @cli.command("dirs")
-@click.option("-t", "--target",   required=True)
-@click.option("-w", "--wordlist", default=None)
-@click.option("-o", "--output",   default=None)
-def dirs(target, wordlist, output):
-    """[DAY 4] Discover directories and endpoints (FFUF wrapper)."""
-    banner()
-    console.print("\n  [yellow]⏳ Directory discovery coming on Day 4![/yellow]\n")
+@click.option("-t", "--target",     required=True,
+              help="Target URL (e.g. https://example.com or example.com/api)")
+@click.option("-w", "--wordlist",   default=None,
+              help="Wordlist path (uses built-in 212-entry list if omitted)")
+@click.option("-x", "--extensions", default="",
+              help="File extensions to append: php,bak,txt,json")
+@click.option("--threads",          default=40,  show_default=True,
+              help="Concurrent request threads")
+@click.option("--timeout",          default=8,   show_default=True,
+              help="Per-request timeout in seconds")
+@click.option("--codes",            default="200,201,204,301,302,307,308,401,403,405,500",
+              show_default=True, help="HTTP status codes to report (comma-separated)")
+@click.option("-o", "--output",     default=None,
+              help="Output JSON file (auto-named if omitted)")
+@click.option("--no-banner",        is_flag=True, help="Skip the ASCII banner")
+def dirs(target, wordlist, extensions, threads, timeout, codes, output, no_banner):
+    """
+    \b
+    Discover hidden directories, files, and API endpoints via HTTP fuzzing.
+    Uses built-in wordlist by default. Highlights sensitive findings automatically.
+
+    \b
+    Examples:
+      reconx dirs -t example.com
+      reconx dirs -t https://example.com/api
+      reconx dirs -t example.com -x php,bak,txt
+      reconx dirs -t example.com -w /usr/share/seclists/Discovery/Web-Content/common.txt
+      reconx dirs -t example.com --threads 80 --timeout 5
+    """
+    if not no_banner:
+        banner()
+
+    from reconx.modules.dirs import DirScanner
+
+    try:
+        code_set = {int(c.strip()) for c in codes.split(",") if c.strip()}
+    except ValueError:
+        error("Invalid --codes value. Example: 200,301,403")
+        raise click.Abort()
+
+    ext_list = [e.strip() for e in extensions.split(",") if e.strip()]
+
+    def on_found(hit):
+        pass   # live save handled by summary write after scan
+
+    scanner = DirScanner(
+        target       = target,
+        wordlist     = wordlist,
+        extensions   = ext_list,
+        threads      = threads,
+        timeout      = timeout,
+        status_codes = code_set,
+        on_found     = on_found,
+    )
+
+    result      = scanner.run()
+    output_path = _resolve_output_path(output, target, "dirs")
+    _save_json(output_path, result.to_dict())
+    info(f"Results saved → [accent]{output_path}[/accent]")
+
+    if result.error:
+        raise click.ClickException(result.error)
 
 
 # ── Day 5 placeholder ─────────────────────────────────────────────────
